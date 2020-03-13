@@ -7,7 +7,7 @@ axios.get('https://api.github.com/users/Dino-Muratovic')
 //Promise one -- fetching data from the link above github
 .then(response =>{
   //if the data runs properly console the whole data piece
-  //--console.log(`this is response `, response);
+  // console.log(`this is response `, response);
 
   //append here instead of the bottom of the page
   //call the function inside () and pass in the data you need
@@ -20,13 +20,33 @@ axios.get('https://api.github.com/users/Dino-Muratovic')
   console.log(`This data was not found:`, error);
 })
 
-axios.get('https://api.github.com/users/Dino-Muratovic')
+axios.get('https://api.github.com/users/Dino-Muratovic/followers')
 .then(response => {
   // cardsContainer.append(personCard(response.data));
-  console.log(response);
+  console.log(`this is 1st axio response `, response);
+  response.data.forEach(function(item){
+    // console.log(`this is the item`, item);
+    // console.log(`This is location `, item.location);
+
+// another axios inside the axios -- accessing the api again    
+axios.get(`https://api.github.com/users/${item.login}`)
+  .then(res => {
+    console.log(`this is 2nd axio response`, res)
+    cardsContainer.append(personCard(res.data));
+  })
+  .catch(error => {
+    //if data was not sucessfully fetched. Show an error printed below
+    console.log(`This data was not found:`, error);
+  })     
+    
+
+  })
+
 })
-
-
+.catch(error => {
+  //if data was not sucessfully fetched. Show an error printed below
+  console.log(`This data was not found:`, error);
+})
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -54,6 +74,7 @@ create a new component and add it to the DOM as a child of .cards
 */
 
 const followersArray = [];
+// console.log(followersArray);
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
